@@ -1,6 +1,8 @@
 # Jules API クライアントライブラリ
 
-Jules API の公式クライアントライブラリです。JavaScript/Node.js、Go、Python の 3 言語で提供されています。
+これは非公式ライブラリです。
+
+Jules API のクライアントライブラリです。JavaScript/Node.js、Go、Python の 3 言語で提供されています。
 
 ## Jules API について
 
@@ -10,9 +12,9 @@ Jules API を使用して、Jules の機能をプログラムから活用し、�
 
 ## ライブラリ
 
-- [**JavaScript/Node.js**](./js) - npm パッケージ、TypeScript 対応
-- [**Go**](./go) - Go モジュール
-- [**Python**](./py) - Python パッケージ
+- [**JavaScript/Node.js**](https://github.com/yuyu1815/jules-api/tree/main/js) - npm パッケージ、TypeScript 対応
+- [**Go**](https://github.com/yuyu1815/jules-api/tree/main/go) - Go モジュール
+- [**Python**](https://github.com/yuyu1815/jules-api/tree/main/py) - Python パッケージ
 
 各ライブラリは、Jules API と連携するための完全なクライアント実装を提供します：
 

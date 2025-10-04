@@ -1,6 +1,8 @@
 # Jules API 客户端库
 
-此仓库包含用于 Jules API 的官方客户端库，支持三种语言：JavaScript/Node.js、Go 和 Python。
+这是非官方库。
+
+此仓库包含用于 Jules API 的客户端库，支持三种语言：JavaScript/Node.js、Go 和 Python。
 
 ## 关于 Jules API
 
@@ -10,9 +12,9 @@ Jules API 允许您以编程方式访问 Jules 的功能，以自动化和增强
 
 ## 库
 
-- [**JavaScript/Node.js**](./js) - npm 包，支持 TypeScript
-- [**Go**](./go) - Go 模块
-- [**Python**](./py) - Python 包
+- [**JavaScript/Node.js**](https://github.com/yuyu1815/jules-api/tree/main/js) - npm 包，支持 TypeScript
+- [**Go**](https://github.com/yuyu1815/jules-api/tree/main/go) - Go 模块
+- [**Python**](https://github.com/yuyu1815/jules-api/tree/main/py) - Python 包
 
 每个库提供 Jules API 交互的完整客户端实现，包括：
 

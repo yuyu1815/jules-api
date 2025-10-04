@@ -1,6 +1,8 @@
 # Jules API Client Libraries
 
-This repository contains official client libraries for the Jules API in three languages: JavaScript/Node.js, Go, and Python.
+This is an unofficial library.
+
+This repository contains client libraries for the Jules API in three languages: JavaScript/Node.js, Go, and Python.
 
 ## About the Jules API
 
@@ -10,9 +12,9 @@ The Jules API lets you programmatically access Jules's capabilities to automate 
 
 ## Libraries
 
-- [**JavaScript/Node.js**](./js) - npm package with TypeScript support
-- [**Go**](./go) - Go module
-- [**Python**](./py) - Python package
+- [**JavaScript/Node.js**](https://github.com/yuyu1815/jules-api/tree/main/js) - npm package with TypeScript support
+- [**Go**](https://github.com/yuyu1815/jules-api/tree/main/go) - Go module
+- [**Python**](https://github.com/yuyu1815/jules-api/tree/main/py) - Python package
 
 Each library provides a complete client implementation for interacting with the Jules API, including:
 
