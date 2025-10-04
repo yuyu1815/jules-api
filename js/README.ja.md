@@ -7,9 +7,7 @@
 
 ## インストール
 
-```bash
-npm install @jules-ai/jules-api
-```
+少しお待ちください。
 
 ## 使い方
 

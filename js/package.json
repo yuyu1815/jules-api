@@ -1,6 +1,6 @@
 {
-  "name": "@jules-ai/jules-api",
-  "version": "0.1.0-alpha",
+  "name": "@yuzumican/jules-api",
+  "version": "0.1.1-alpha",
   "description": "Official Node.js client for the Jules API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,10 +19,10 @@
   ],
   "author": "Jules AI",
   "license": "MIT",
-  "homepage": "https://github.com/jules-ai/jules-api",
+  "homepage": "https://github.com/yuyu1815/jules-api",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jules-ai/jules-api.git"
+    "url": "git+https://github.com/yuyu1815/jules-api.git"
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",

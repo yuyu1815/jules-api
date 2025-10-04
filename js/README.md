@@ -8,13 +8,13 @@ Official Node.js/TypeScript client library for the [Jules API](https://developer
 ## Installation
 
 ```bash
-npm install @jules-ai/jules-api
+npm install @yuzumican/jules-api
 ```
 
 ## Usage
 
 ```typescript
-import { JulesClient } from '@jules-ai/jules-api';
+import { JulesClient } from '@yuzumican/jules-api';
 
 // Initialize the client with your API key
 const client = new JulesClient({
