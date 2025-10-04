@@ -26,6 +26,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+.venv/
 
 # Node.js
 node_modules/
@@ -80,8 +81,6 @@ logs
 *.log
 
 # Build artifacts
-build/
-dist/
 out/
 
 # Test results
