@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python Versions](https://img.shields.io/pypi/pyversions/jules-api)
 
-Official Python client library for the [Jules API](https://developers.google.com/jules/api).
+Unofficial Python client library for the Jules API.
 
 ## Installation
 

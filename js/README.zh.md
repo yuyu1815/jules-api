@@ -3,16 +3,18 @@
 [![npm version](https://badge.fury.io/js/%40jules-ai%2Fjules-api.svg)](https://badge.fury.io/js/%40jules-ai%2Fjules-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Jules API](https://developers.google.com/jules/api) 官方 Node.js/TypeScript 客户端库。
+Jules API 的非官方 Node.js/TypeScript 客户端库。
 
 ## 安装
 
-请稍等。
+```bash
+npm install @yuzumican/jules-api
+```
 
 ## 使用
 
 ```typescript
-import { JulesClient } from '@jules-ai/jules-api';
+import { JulesClient } from '@yuzumican/jules-api';
 
 // 使用 API 密钥初始化客户端
 const client = new JulesClient({

@@ -4,6 +4,14 @@ This is an unofficial library.
 
 This repository contains client libraries for the Jules API in three languages: JavaScript/Node.js, Go, and Python.
 
+## Installation
+
+Install the client library for your preferred language:
+
+- **JavaScript/Node.js**: `npm install @yuzumican/jules-api` ([npm package](https://www.npmjs.com/package/@yuzumican/jules-api))
+- **Python**: `pip install jules-api` ([PyPI package](https://pypi.org/project/jules-api/1.0/))
+- **Go**: `go get github.com/yuyu1815/jules-api/go@latest` ([Go module](https://github.com/yuyu1815/jules-api/tree/main/go))
+
 ## About the Jules API
 
 The Jules API lets you programmatically access Jules's capabilities to automate and enhance your software development lifecycle. You can use the API to create custom workflows, automate tasks like bug fixing and code reviews, and embed Jules's intelligence directly into the tools you use every day.

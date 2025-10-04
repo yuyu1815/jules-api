@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python Versions](https://img.shields.io/pypi/pyversions/jules-api)
 
-[Jules API](https://developers.google.com/jules/api) 公式 Python クライアントライブラリ。
+Jules API の非公式 Python クライアントライブラリ。
 
 ## インストール
 

@@ -3,7 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/yuyu1815/jules-api/go.svg)](https://pkg.go.dev/github.com/yuyu1815/jules-api/go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official Go client library for the [Jules API](https://developers.google.com/jules/api).
+Unofficial Go client library for the Jules API.
 
 ## Installation
 

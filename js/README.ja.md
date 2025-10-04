@@ -3,16 +3,18 @@
 [![npm version](https://badge.fury.io/js/%40jules-ai%2Fjules-api.svg)](https://badge.fury.io/js/%40jules-ai%2Fjules-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Jules API](https://developers.google.com/jules/api) 公式 Node.js/TypeScript クライアントライブラリ。
+Jules API の非公式 Node.js/TypeScript クライアントライブラリ。
 
 ## インストール
 
-少しお待ちください。
+```bash
+npm install @yuzumican/jules-api
+```
 
 ## 使い方
 
 ```typescript
-import { JulesClient } from '@jules-ai/jules-api';
+import { JulesClient } from '@yuzumican/jules-api';
 
 // APIキーを使用してクライアントを初期化
 const client = new JulesClient({

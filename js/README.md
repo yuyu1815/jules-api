@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/%40jules-ai%2Fjules-api.svg)](https://badge.fury.io/js/%40jules-ai%2Fjules-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Official Node.js/TypeScript client library for the [Jules API](https://developers.google.com/jules/api).
+Unofficial Node.js/TypeScript client library for the Jules API.
 
 ## Installation
 

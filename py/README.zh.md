@@ -4,11 +4,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python Versions](https://img.shields.io/pypi/pyversions/jules-api)
 
-[Jules API](https://developers.google.com/jules/api) 官方 Python 客户端库。
+Jules API 的非官方 Python 客户端库。
 
 ## 安装
 
-请稍等。
+```bash
+pip install jules-api
+```
 
 ## 使用
 

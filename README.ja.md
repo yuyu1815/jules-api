@@ -4,6 +4,14 @@
 
 Jules API のクライアントライブラリです。JavaScript/Node.js、Go、Python の 3 言語で提供されています。
 
+## インストール
+
+使用する言語に対応したクライアントライブラリをインストールしてください：
+
+- **JavaScript/Node.js**: `npm install @yuzumican/jules-api` ([npm パッケージ](https://www.npmjs.com/package/@yuzumican/jules-api))
+- **Python**: `pip install jules-api` ([PyPI パッケージ](https://pypi.org/project/jules-api/1.0/))
+- **Go**: `go get github.com/yuyu1815/jules-api/go@latest` ([Go モジュール](https://github.com/yuyu1815/jules-api/tree/main/go))
+
 ## Jules API について
 
 Jules API を使用して、Jules の機能をプログラムから活用し、ソフトウェア開発ライフサイクルを自動化・強化できます。API を使用して、カスタムワークフローを作成したり、コードレビューのようなタスクを自動化したり、日常的に使用するツールに Jules のインテリジェンスを直接埋め込んだりできます。

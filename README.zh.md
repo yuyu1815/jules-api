@@ -4,6 +4,14 @@
 
 此仓库包含用于 Jules API 的客户端库，支持三种语言：JavaScript/Node.js、Go 和 Python。
 
+## 安装
+
+安装适合您首选语言的客户端库：
+
+- **JavaScript/Node.js**: `npm install @yuzumican/jules-api` ([npm 软件包](https://www.npmjs.com/package/@yuzumican/jules-api))
+- **Python**: `pip install jules-api` ([PyPI 软件包](https://pypi.org/project/jules-api/1.0/))
+- **Go**: `go get github.com/yuyu1815/jules-api/go@latest` ([Go 模块](https://github.com/yuyu1815/jules-api/tree/main/go))
+
 ## 关于 Jules API
 
 Jules API 允许您以编程方式访问 Jules 的功能，以自动化和增强您的软件开发生命周期。您可以使用 API 创建自定义工作流程，自动化任务，如错误修复和代码审查，并将 Jules 的智能直接嵌入到您日常使用的工具中。

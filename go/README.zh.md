@@ -3,11 +3,15 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/yuyu1815/jules-api/go.svg)](https://pkg.go.dev/github.com/yuyu1815/jules-api/go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Jules API](https://developers.google.com/jules/api) 官方 Go 客户端库。
+Jules API 的非官方 Go 客户端库。
 
 ## 安装
 
-请稍等。
+运行以下命令安装库：
+
+```bash
+go get github.com/yuyu1815/jules-api/go@latest
+```
 
 ## 使用
 
