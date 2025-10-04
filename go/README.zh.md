@@ -1,15 +1,13 @@
 # Jules API Go 客户端
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/jules-ai/jules-api-go.svg)](https://pkg.go.dev/github.com/jules-ai/jules-api-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/yuyu1815/jules-api/go.svg)](https://pkg.go.dev/github.com/yuyu1815/jules-api/go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [Jules API](https://developers.google.com/jules/api) 官方 Go 客户端库。
 
 ## 安装
 
-```bash
-go get github.com/jules-ai/jules-api-go
-```
+请稍等。
 
 ## 使用
 
@@ -21,7 +19,7 @@ import (
 	"log"
 	"os"
 
-	jules "github.com/jules-ai/jules-api-go"
+	jules "github.com/yuyu1815/jules-api/go"
 )
 
 func main() {

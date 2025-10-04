@@ -1,14 +1,16 @@
 # Jules API Go Client
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/jules-ai/jules-api-go.svg)](https://pkg.go.dev/github.com/jules-ai/jules-api-go)
+[![Go Reference](https://pkg.go.dev/badge/github.com/yuyu1815/jules-api/go.svg)](https://pkg.go.dev/github.com/yuyu1815/jules-api/go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Official Go client library for the [Jules API](https://developers.google.com/jules/api).
 
 ## Installation
 
+Run the following command to install the library:
+
 ```bash
-go get github.com/jules-ai/jules-api-go
+go get github.com/yuyu1815/jules-api/go@latest
 ```
 
 ## Usage
@@ -21,7 +23,7 @@ import (
 	"log"
 	"os"
 
-	jules "github.com/jules-ai/jules-api-go"
+	jules "github.com/yuyu1815/jules-api/go"
 )
 
 func main() {

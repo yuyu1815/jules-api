@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	jules "github.com/jules-ai/jules-api-go"
+	jules "github.com/yuyu1815/jules-api/go"
 )
 
 func testListSources(client *jules.Client) ([]jules.Source, bool) {
