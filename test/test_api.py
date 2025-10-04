@@ -216,8 +216,10 @@ def main():
 
         # 5. List activities (wait a moment for activities to be generated)
         print("\n⏳ Waiting 5 seconds for activities to be generated...")
-        time.sleep(5)
+        time.sleep(20)
+
         activities = test_list_activities(client, session_id)
+
         test_results['list_activities'] = len(activities) >= 0
 
         # 6. Send message
@@ -261,5 +263,6 @@ def main():
 
 
 if __name__ == "__main__":
+
     exit_code = main()
     sys.exit(exit_code)

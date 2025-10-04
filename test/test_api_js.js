@@ -5,13 +5,7 @@
  * Tests all endpoints using the provided API key.
  */
 
-const path = require('path');
-const fs = require('fs');
-
-// Load .env file
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-
-const { JulesClient } = require(path.join(__dirname, '..', 'js', 'src', 'index.ts'));
+import { JulesClient } from '@yuzumican/jules-api';
 
 async function testListSources(client) {
   console.log("📋 Testing: List Sources");
