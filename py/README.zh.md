@@ -8,15 +8,7 @@
 
 ## 安装
 
-```bash
-pip install jules-api
-```
-
-或从源码安装：
-
-```bash
-pip install -e .
-```
+请稍等。
 
 ## 使用
 

@@ -12,12 +12,6 @@ Official Python client library for the [Jules API](https://developers.google.com
 pip install jules-api
 ```
 
-Or install from source:
-
-```bash
-pip install -e .
-```
-
 ## Usage
 
 ```python

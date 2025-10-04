@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="jules-api",
-    version="0.1.0a",
+    version="1.0",
     author="Jules AI",
     author_email="support@jules.ai",
     description="Official Python client for the Jules API",

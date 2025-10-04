@@ -8,15 +8,7 @@
 
 ## インストール
 
-```bash
-pip install jules-api
-```
-
-またはソースからインストール：
-
-```bash
-pip install -e .
-```
+このライブラリは非公式です。[GitHub リポジトリ](https://github.com/yuyu1815/jules-api/tree/main/py)からインストールおよび使用方法を確認してください。
 
 ## 使い方
 
