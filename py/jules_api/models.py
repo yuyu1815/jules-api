@@ -83,8 +83,9 @@ class ListActivitiesResponse(BaseModel):
 
 class ClientOptions(BaseModel):
     """Client configuration options."""
-    api_key: str
+    api_key: Optional[str] = None
     base_url: Optional[str] = "https://jules.googleapis.com/v1alpha"
+    timeout: int = 60
 
     class Config:
         validate_assignment = True

@@ -5,7 +5,8 @@
  * Tests all endpoints using the provided API key.
  */
 
-import { JulesClient } from '@yuzumican/jules-api';
+import { JulesClient } from '../js/src/index.js';
+import 'dotenv/config';
 
 async function testListSources(client) {
   console.log("📋 Testing: List Sources");
@@ -108,7 +109,7 @@ async function testListActivities(client, sessionId) {
     const response = await client.listActivities(sessionId, 10);
     console.log(`   ✅ Success: Found ${response.activities.length} activities`);
     response.activities.slice(0, 3).forEach((activity, i) => {
-      const timestamp = activity.timestamp ? activity.timestamp.toLocaleTimeString() : "No timestamp";
+      const timestamp = activity.timestamp ? new Date(activity.timestamp).toLocaleTimeString() : "No timestamp";
       const content = (activity.content || "No content").substring(0, 50) + "...";
       console.log(`      [${i + 1}] ${activity.type} @ ${timestamp}: ${content}`);
     });
@@ -168,19 +169,23 @@ async function main() {
   console.log(`⏰ Test started at: ${new Date().toISOString()}`);
   console.log();
 
-  // API key from the user
-  const apiKey = "AQ.Ab8RN6L3BuTOmJ8G7VmrIPu8u_LY14P4AFgs1V4CcNWDFYlQNg";
+  const apiKey = process.env.JULES_API_KEY;
+  if (!apiKey) {
+    console.log("❌ Error: JULES_API_KEY environment variable not found.");
+    console.log("   Please create a test/.env file with:");
+    console.log("   JULES_API_KEY=your_api_key_here");
+    process.exit(1);
+  }
 
-  console.log(`🔑 Using API Key: ${apiKey.substring(0, 20)}...`);
+  console.log(`🔑 Using API Key from .env: ${apiKey.substring(0, 20)}...`);
   console.log();
 
   try {
-    // Create client (note: using ClientOptions-like structure)
     const client = new JulesClient({
-      apiKey: apiKey
+      apiKey: apiKey,
+      timeout: -1, // Use infinite timeout for all requests
     });
 
-    // Test results tracking
     const testResults = {
       listSources: false,
       createSession: false,
@@ -191,42 +196,33 @@ async function main() {
       getSource: false
     };
 
-    // Run tests
     let sources = [];
     let session = null;
     let sessionId = null;
 
-    // 1. List sources
     sources = await testListSources(client);
     testResults.listSources = sources.length > 0;
 
-    // 2. Create session
     session = await testCreateSession(client, sources);
     testResults.createSession = session !== null;
     if (session) {
       sessionId = session.id;
     }
 
-    // 3. Get session
     testResults.getSession = (await testGetSession(client, sessionId)) !== null;
 
-    // 4. List sessions
     const sessionsList = await testListSessions(client);
-    testResults.listSessions = sessionsList.length >= 0; // Could be empty
+    testResults.listSessions = sessionsList.length >= 0;
 
-    // 5. List activities (wait a moment for activities to be generated)
     console.log("\n⏳ Waiting 5 seconds for activities to be generated...");
     await new Promise(resolve => setTimeout(resolve, 5000));
     const activities = await testListActivities(client, sessionId);
     testResults.listActivities = activities.length >= 0;
 
-    // 6. Send message
     testResults.sendMessage = await testSendMessage(client, sessionId);
 
-    // 7. Get source
     testResults.getSource = (await testGetSource(client, sources)) !== null;
 
-    // Summary
     console.log("\n" + "=".repeat(60));
     console.log("📊 TEST RESULTS SUMMARY");
     console.log("=".repeat(60));
@@ -260,7 +256,6 @@ async function main() {
   }
 }
 
-// Run the test
 main().then(exitCode => {
   process.exit(exitCode);
 }).catch(error => {

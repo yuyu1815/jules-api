@@ -79,14 +79,17 @@ type SendMessageRequest struct {
 
 // ClientOptions contains configuration options for the Jules client
 type ClientOptions struct {
-	APIKey  string
-	BaseURL string
+	APIKey  *string
+	BaseURL *string
+	Timeout *time.Duration
 }
 
 // NewClientOptions creates default client options
-func NewClientOptions(apiKey string) *ClientOptions {
+func NewClientOptions() *ClientOptions {
+	baseURL := "https://jules.googleapis.com/v1alpha"
+	timeout := 60 * time.Second
 	return &ClientOptions{
-		APIKey:  apiKey,
-		BaseURL: "https://jules.googleapis.com/v1alpha",
+		BaseURL: &baseURL,
+		Timeout: &timeout,
 	}
 }

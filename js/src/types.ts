@@ -61,6 +61,7 @@ export interface SendMessageRequest {
 }
 
 export interface JulesClientOptions {
-  apiKey: string;
+  apiKey?: string;
   baseUrl?: string;
+  timeout?: number;
 }

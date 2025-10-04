@@ -23,12 +23,14 @@ def test_list_sources(client):
     """Test listing sources endpoint."""
     print("📋 Testing: List Sources")
     try:
-        response = client.list_sources()
+        response = client.list_sources(timeout=-1)
         print(f"   ✅ Success: Found {len(response.sources)} sources")
-        for i, source in enumerate(response.sources):
+        for i, source in enumerate(response.sources[:5]):
             print(f"      [{i+1}] {source.id}: {source.name}")
             if source.github_repo:
                 print(f"          GitHub: {source.github_repo.owner}/{source.github_repo.repo}")
+        if len(response.sources) > 5:
+            print(f"      ... and {len(response.sources) - 5} more sources")
         return response.sources
     except Exception as e:
         print(f"   ❌ Failed: {e}")
@@ -53,10 +55,10 @@ def test_create_session(client, sources):
                 github_repo_context=GithubRepoContext(starting_branch="main")
             ),
             title="API Test Session",
-            require_plan_approval=False  # Don't require approval for testing
+            require_plan_approval=False
         )
 
-        session = client.create_session(request)
+        session = client.create_session(request, timeout=-1)
         print("   ✅ Success: Session created")
         print(f"      ID: {session.id}")
         print(f"      Title: {session.title}")
@@ -75,7 +77,7 @@ def test_get_session(client, session_id):
         return None
 
     try:
-        session = client.get_session(session_id)
+        session = client.get_session(session_id, timeout=-1)
         print("   ✅ Success: Session retrieved")
         print(f"      ID: {session.id}")
         print(f"      Title: {session.title}")
@@ -89,7 +91,7 @@ def test_list_sessions(client):
     """Test listing sessions endpoint."""
     print("\n📂 Testing: List Sessions")
     try:
-        response = client.list_sessions(page_size=5)
+        response = client.list_sessions(page_size=5, timeout=-1)
         print(f"   ✅ Success: Found {len(response.sessions)} sessions")
         if response.next_page_token:
             print(f"      Next page token: {response.next_page_token}")
@@ -107,9 +109,9 @@ def test_list_activities(client, session_id):
         return []
 
     try:
-        response = client.list_activities(session_id, page_size=10)
+        response = client.list_activities(session_id, page_size=10, timeout=-1)
         print(f"   ✅ Success: Found {len(response.activities)} activities")
-        for i, activity in enumerate(response.activities[:3]):  # Show first 3
+        for i, activity in enumerate(response.activities[:3]):
             timestamp = activity.timestamp.strftime("%H:%M:%S") if activity.timestamp else "No timestamp"
             content = (activity.content or "No content")[:50] + "..."
             print(f"      [{i+1}] {activity.type} @ {timestamp}: {content}")
@@ -132,7 +134,7 @@ def test_send_message(client, session_id):
         request = SendMessageRequest(
             prompt="Please confirm that the API testing is working correctly by acknowledging this message."
         )
-        client.send_message(session_id, request)
+        client.send_message(session_id, request, timeout=-1)
         print("   ✅ Success: Message sent")
         return True
     except Exception as e:
@@ -149,7 +151,7 @@ def test_get_source(client, sources):
 
     source_id = sources[0].id
     try:
-        source = client.get_source(source_id)
+        source = client.get_source(source_id, timeout=-1)
         print("   ✅ Success: Source retrieved")
         print(f"      ID: {source.id}")
         print(f"      Name: {source.name}")
@@ -166,7 +168,6 @@ def main():
     print(f"⏰ Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print()
 
-    # API key from environment variables (.env file)
     api_key = os.getenv("JULES_API_KEY")
     if not api_key:
         print("❌ Error: JULES_API_KEY environment variable not found.")
@@ -178,10 +179,8 @@ def main():
     print()
 
     try:
-        # Create client
-        client = create_client(api_key)
+        client = create_client(api_key=api_key, timeout=-1)
 
-        # Test results tracking
         test_results = {
             'list_sources': False,
             'create_session': False,
@@ -192,43 +191,30 @@ def main():
             'get_source': False
         }
 
-        # Run tests
-        sources = []
-        session = None
-        session_id = None
-
-        # 1. List sources
         sources = test_list_sources(client)
         test_results['list_sources'] = len(sources) > 0
 
-        # 2. Create session
         session = test_create_session(client, sources)
         test_results['create_session'] = session is not None
         if session:
             session_id = session.id
+        else:
+            session_id = None
 
-        # 3. Get session
         test_results['get_session'] = test_get_session(client, session_id) is not None
 
-        # 4. List sessions
         sessions_list = test_list_sessions(client)
-        test_results['list_sessions'] = len(sessions_list) >= 0  # Could be empty
+        test_results['list_sessions'] = len(sessions_list) >= 0
 
-        # 5. List activities (wait a moment for activities to be generated)
         print("\n⏳ Waiting 5 seconds for activities to be generated...")
-        time.sleep(20)
-
+        time.sleep(5)
         activities = test_list_activities(client, session_id)
-
         test_results['list_activities'] = len(activities) >= 0
 
-        # 6. Send message
         test_results['send_message'] = test_send_message(client, session_id)
 
-        # 7. Get source
         test_results['get_source'] = test_get_source(client, sources) is not None
 
-        # Summary
         print("\n" + "=" * 50)
         print("📊 TEST RESULTS SUMMARY")
         print("=" * 50)
@@ -263,6 +249,5 @@ def main():
 
 
 if __name__ == "__main__":
-
     exit_code = main()
     sys.exit(exit_code)

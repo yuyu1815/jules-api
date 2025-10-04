@@ -1,9 +1,16 @@
 {
+  "name": "jules-api-test",
+  "version": "1.0.0",
+  "description": "Jules API Test Suite",
+  "main": "test_api_js.js",
   "type": "module",
   "scripts": {
     "test": "node test_api_js.js"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@yuzumican/jules-api": "^0.1.1-alpha"
+    "@yuzumican/jules-api": "file:../js",
+    "dotenv": "^16.4.5"
   }
 }

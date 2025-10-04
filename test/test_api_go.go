@@ -6,12 +6,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	jules "github.com/yuyu1815/jules-api/go"
 )
 
 func testListSources(client *jules.Client) ([]jules.Source, bool) {
 	fmt.Println("📋 Testing: List Sources")
-	sources, err := client.ListSources("")
+	sources, err := client.ListSources("", nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return nil, false
@@ -52,7 +53,7 @@ func testCreateSession(client *jules.Client, sources []jules.Source) (*jules.Ses
 		RequirePlanApproval: false,
 	}
 
-	session, err := client.CreateSession(request)
+	session, err := client.CreateSession(request, nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return nil, false
@@ -72,7 +73,7 @@ func testGetSession(client *jules.Client, sessionID string) (*jules.Session, boo
 		return nil, false
 	}
 
-	session, err := client.GetSession(sessionID)
+	session, err := client.GetSession(sessionID, nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return nil, false
@@ -86,7 +87,7 @@ func testGetSession(client *jules.Client, sessionID string) (*jules.Session, boo
 
 func testListSessions(client *jules.Client) ([]jules.Session, bool) {
 	fmt.Println("\n📂 Testing: List Sessions")
-	sessions, err := client.ListSessions(5, "")
+	sessions, err := client.ListSessions(5, "", nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return nil, false
@@ -96,7 +97,7 @@ func testListSessions(client *jules.Client) ([]jules.Session, bool) {
 	if sessions.NextPageToken != "" {
 		fmt.Printf("      Next page token: %s\n", sessions.NextPageToken)
 	}
-	return sessions.Sessions, true // len(sessions.Sessions) >= 0 is always true
+	return sessions.Sessions, true
 }
 
 func testListActivities(client *jules.Client, sessionID string) ([]jules.Activity, bool) {
@@ -106,7 +107,7 @@ func testListActivities(client *jules.Client, sessionID string) ([]jules.Activit
 		return nil, false
 	}
 
-	activities, err := client.ListActivities(sessionID, 10, "")
+	activities, err := client.ListActivities(sessionID, 10, "", nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return nil, false
@@ -145,7 +146,7 @@ func testSendMessage(client *jules.Client, sessionID string) bool {
 		Prompt: "Please confirm that the API testing is working correctly by acknowledging this message.",
 	}
 
-	err := client.SendMessage(sessionID, request)
+	err := client.SendMessage(sessionID, request, nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return false
@@ -163,7 +164,7 @@ func testGetSource(client *jules.Client, sources []jules.Source) (*jules.Source,
 	}
 
 	sourceID := sources[0].ID
-	source, err := client.GetSource(sourceID)
+	source, err := client.GetSource(sourceID, nil)
 	if err != nil {
 		fmt.Printf("   ❌ Failed: %v\n", err)
 		return nil, false
@@ -181,7 +182,12 @@ func main() {
 	fmt.Printf("⏰ Test started at: %s\n", time.Now().Format("2006-01-02 15:04:05"))
 	fmt.Println()
 
-	// API key from environment variables (.env file)
+	// Load .env file
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("⚠️  Warning: Could not load .env file. Continuing without it.")
+	}
+
 	apiKey := os.Getenv("JULES_API_KEY")
 	if apiKey == "" {
 		fmt.Println("❌ Error: JULES_API_KEY environment variable not found.")
@@ -193,11 +199,17 @@ func main() {
 	fmt.Printf("🔑 Using API Key from .env: %s...\n", apiKey[:20])
 	fmt.Println()
 
-	// Create client
-	options := jules.NewClientOptions(apiKey)
-	client := jules.NewClient(options)
+	// Create client with infinite timeout
+	options := jules.NewClientOptions()
+	options.APIKey = &apiKey
+	timeout := -1 * time.Second
+	options.Timeout = &timeout
+	client, err := jules.NewClient(options)
+	if err != nil {
+		fmt.Printf("❌ Error creating client: %v\n", err)
+		os.Exit(1)
+	}
 
-	// Test results tracking
 	testResults := map[string]bool{
 		"listSources":   false,
 		"createSession": false,
@@ -208,38 +220,26 @@ func main() {
 		"getSource":     false,
 	}
 
-	// Run tests
 	var sources []jules.Source
 	var session *jules.Session
 	var sessionID string
 
-	// 1. List sources
 	sources, testResults["listSources"] = testListSources(client)
-
-	// 2. Create session
 	session, testResults["createSession"] = testCreateSession(client, sources)
 	if session != nil {
 		sessionID = session.ID
 	}
 
-	// 3. Get session
 	_, testResults["getSession"] = testGetSession(client, sessionID)
-
-	// 4. List sessions
 	_, testResults["listSessions"] = testListSessions(client)
 
-	// 5. List activities (wait a moment for activities to be generated)
 	fmt.Println("\n⏳ Waiting 5 seconds for activities to be generated...")
-	time.Sleep(5 * time.Second)
+	time.Sleep(5)
 	_, testResults["listActivities"] = testListActivities(client, sessionID)
 
-	// 6. Send message
 	testResults["sendMessage"] = testSendMessage(client, sessionID)
-
-	// 7. Get source
 	_, testResults["getSource"] = testGetSource(client, sources)
 
-	// Summary
 	fmt.Println("\n" + strings.Repeat("=", 60))
 	fmt.Println("📊 TEST RESULTS SUMMARY")
 	fmt.Println(strings.Repeat("=", 60))
@@ -263,7 +263,6 @@ func main() {
 		if !passed {
 			status = "❌ FAIL"
 		}
-		// Capitalize first letter and add spaces before capital letters
 		displayName := strings.ToUpper(testName[:1]) + strings.ReplaceAll(strings.ReplaceAll(testName[1:], "([A-Z])", " $1"), "([A-Z])", " $1")
 		fmt.Printf("  %s: %s\n", displayName, status)
 	}
