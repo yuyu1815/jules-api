@@ -13,19 +13,42 @@ import {
 
 export class JulesClient {
   private httpClient: AxiosInstance;
-  private apiKey: string;
 
-  constructor(options: JulesClientOptions) {
-    const { apiKey, baseUrl = 'https://jules.googleapis.com/v1alpha' } = options;
+  constructor(options: JulesClientOptions = {}) {
+    let { apiKey, baseUrl = 'https://jules.googleapis.com/v1alpha', timeout = 60000 } = options;
 
-    this.apiKey = apiKey;
+    if (!apiKey) {
+      apiKey = process.env.JULES_API_KEY;
+    }
+
+    if (!apiKey) {
+      throw new Error('API key must be provided either in options or as a JULES_API_KEY environment variable.');
+    }
+
     this.httpClient = axios.create({
       baseURL: baseUrl,
+      timeout: timeout,
       headers: {
         'X-Goog-Api-Key': apiKey,
         'Content-Type': 'application/json',
       },
     });
+  }
+
+  private async _request<T>(requestFn: () => Promise<{ data: T }>): Promise<T> {
+    try {
+      const { data } = await requestFn();
+      return data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Prefer the API's error message, but fall back to the default Axios message
+        const message = (error.response?.data as any)?.error?.message || error.message;
+        const status = error.response?.status ? ` (status: ${error.response.status})` : '';
+        throw new Error(`Jules API request failed${status}: ${message}`);
+      }
+      // Re-throw non-Axios errors
+      throw error;
+    }
   }
 
   /**
@@ -35,8 +58,7 @@ export class JulesClient {
    */
   async listSources(nextPageToken?: string): Promise<ListSourcesResponse> {
     const params = nextPageToken ? { nextPageToken } : {};
-    const response = await this.httpClient.get('/sources', { params });
-    return response.data;
+    return this._request<ListSourcesResponse>(() => this.httpClient.get('/sources', { params }));
   }
 
   /**
@@ -45,8 +67,7 @@ export class JulesClient {
    * @returns Promise<Session>
    */
   async createSession(request: CreateSessionRequest): Promise<Session> {
-    const response = await this.httpClient.post('/sessions', request);
-    return response.data;
+    return this._request<Session>(() => this.httpClient.post('/sessions', request));
   }
 
   /**
@@ -60,8 +81,7 @@ export class JulesClient {
     if (pageSize) params.pageSize = pageSize;
     if (nextPageToken) params.nextPageToken = nextPageToken;
 
-    const response = await this.httpClient.get('/sessions', { params });
-    return response.data;
+    return this._request<ListSessionsResponse>(() => this.httpClient.get('/sessions', { params }));
   }
 
   /**
@@ -70,7 +90,7 @@ export class JulesClient {
    * @returns Promise<void>
    */
   async approvePlan(sessionId: string): Promise<void> {
-    await this.httpClient.post(`/sessions/${sessionId}:approvePlan`);
+    await this._request<void>(() => this.httpClient.post(`/sessions/${sessionId}:approvePlan`));
   }
 
   /**
@@ -89,8 +109,7 @@ export class JulesClient {
     if (pageSize) params.pageSize = pageSize;
     if (nextPageToken) params.nextPageToken = nextPageToken;
 
-    const response = await this.httpClient.get(`/sessions/${sessionId}/activities`, { params });
-    return response.data;
+    return this._request<ListActivitiesResponse>(() => this.httpClient.get(`/sessions/${sessionId}/activities`, { params }));
   }
 
   /**
@@ -100,7 +119,7 @@ export class JulesClient {
    * @returns Promise<void>
    */
   async sendMessage(sessionId: string, request: SendMessageRequest): Promise<void> {
-    await this.httpClient.post(`/sessions/${sessionId}:sendMessage`, request);
+    await this._request<void>(() => this.httpClient.post(`/sessions/${sessionId}:sendMessage`, request));
   }
 
   /**
@@ -109,8 +128,7 @@ export class JulesClient {
    * @returns Promise<Session>
    */
   async getSession(sessionId: string): Promise<Session> {
-    const response = await this.httpClient.get(`/sessions/${sessionId}`);
-    return response.data;
+    return this._request<Session>(() => this.httpClient.get(`/sessions/${sessionId}`));
   }
 
   /**
@@ -119,8 +137,7 @@ export class JulesClient {
    * @returns Promise<Source>
    */
   async getSource(sourceId: string): Promise<Source> {
-    const response = await this.httpClient.get(`/sources/${sourceId}`);
-    return response.data;
+    return this._request<Source>(() => this.httpClient.get(`/sources/${sourceId}`));
   }
 }
 

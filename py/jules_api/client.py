@@ -1,7 +1,7 @@
 """
 Jules API Client implementation.
 """
-
+import os
 import requests
 from typing import Optional
 
@@ -30,6 +30,7 @@ class JulesClient:
         """
         self.api_key = options.api_key
         self.base_url = options.base_url.rstrip('/')
+        self.timeout = options.timeout
         self.session = requests.Session()
         self.session.headers.update({
             'X-Goog-Api-Key': self.api_key,
@@ -40,9 +41,13 @@ class JulesClient:
                      json_data: Optional[dict] = None) -> dict:
         """Make an HTTP request to the API."""
         url = f"{self.base_url}{endpoint}"
-        response = self.session.request(method, url, params=params, json=json_data)
-        response.raise_for_status()
-        return response.json()
+        try:
+            response = self.session.request(method, url, params=params, json=json_data, timeout=self.timeout)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            # Handle connection errors, timeouts, etc.
+            raise ConnectionError(f"API request failed: {e}") from e
 
     def list_sources(self, next_page_token: Optional[str] = None) -> ListSourcesResponse:
         """
@@ -164,18 +169,30 @@ class JulesClient:
         return Source(**response)
 
 
-def create_client(api_key: str, base_url: Optional[str] = None) -> JulesClient:
+def create_client(api_key: Optional[str] = None, base_url: Optional[str] = None, timeout: Optional[int] = 60) -> JulesClient:
     """
     Create a new Jules API client.
 
+    API key can be provided directly or through the JULES_API_KEY environment variable.
+
     Args:
-        api_key: Your Jules API key
+        api_key: Your Jules API key (optional)
         base_url: API base URL (optional)
+        timeout: Request timeout in seconds (optional)
 
     Returns:
         JulesClient: Configured client instance
+
+    Raises:
+        ValueError: If the API key is not provided
     """
-    options = ClientOptions(api_key=api_key)
+    if api_key is None:
+        api_key = os.environ.get("JULES_API_KEY")
+
+    if api_key is None:
+        raise ValueError("API key must be provided either as an argument or through the JULES_API_KEY environment variable.")
+
+    options = ClientOptions(api_key=api_key, timeout=timeout)
     if base_url:
         options.base_url = base_url
     return JulesClient(options)

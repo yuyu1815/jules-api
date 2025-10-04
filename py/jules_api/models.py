@@ -85,6 +85,7 @@ class ClientOptions(BaseModel):
     """Client configuration options."""
     api_key: str
     base_url: Optional[str] = "https://jules.googleapis.com/v1alpha"
+    timeout: Optional[float] = 60 # Default timeout of 60 seconds
 
     class Config:
         validate_assignment = True

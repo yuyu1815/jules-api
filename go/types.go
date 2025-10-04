@@ -77,16 +77,16 @@ type SendMessageRequest struct {
 	Prompt string `json:"prompt"`
 }
 
+// APIError represents the error structure returned by the API.
+type APIError struct {
+	Error struct {
+		Message string `json:"message"`
+	} `json:"error"`
+}
+
 // ClientOptions contains configuration options for the Jules client
 type ClientOptions struct {
 	APIKey  string
 	BaseURL string
-}
-
-// NewClientOptions creates default client options
-func NewClientOptions(apiKey string) *ClientOptions {
-	return &ClientOptions{
-		APIKey:  apiKey,
-		BaseURL: "https://jules.googleapis.com/v1alpha",
-	}
+	Timeout time.Duration
 }

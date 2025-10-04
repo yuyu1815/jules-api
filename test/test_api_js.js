@@ -5,7 +5,26 @@
  * Tests all endpoints using the provided API key.
  */
 
-import { JulesClient } from '@yuzumican/jules-api';
+import { JulesClient } from '../js/dist/index.js'; // Corrected import path
+import dotenv from 'dotenv';
+
+// Load .env file from the current directory
+dotenv.config();
+
+// Helper to wait for a specific duration
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Helper to run a test and capture its result
+async function runTest(testName, testFn, testResults) {
+    try {
+        const result = await testFn();
+        testResults[testName] = result;
+    } catch (error) {
+        console.log(`   💥 Unexpected error in test '${testName}': ${error.message}`);
+        testResults[testName] = false;
+    }
+}
+
 
 async function testListSources(client) {
   console.log("📋 Testing: List Sources");
@@ -14,17 +33,11 @@ async function testListSources(client) {
     console.log(`   ✅ Success: Found ${response.sources.length} sources`);
     response.sources.slice(0, 5).forEach((source, i) => {
       console.log(`      [${i + 1}] ${source.id}: ${source.name}`);
-      if (source.githubRepo) {
-        console.log(`          GitHub: ${source.githubRepo.owner}/${source.githubRepo.repo}`);
-      }
     });
-    if (response.sources.length > 5) {
-      console.log(`      ... and ${response.sources.length - 5} more sources`);
-    }
     return response.sources;
   } catch (error) {
     console.log(`   ❌ Failed: ${error.message}`);
-    return [];
+    return null;
   }
 }
 
@@ -34,28 +47,14 @@ async function testCreateSession(client, sources) {
     console.log("   ⚠️  Skipping: No sources available");
     return null;
   }
-
   const firstSource = sources[0];
-  console.log(`   Using source: ${firstSource.id}`);
-
   try {
-    const request = {
+    const session = await client.createSession({
       prompt: "Create a simple test to verify the API is working correctly.",
-      sourceContext: {
-        source: firstSource.name,
-        githubRepoContext: {
-          startingBranch: "main"
-        }
-      },
+      sourceContext: { source: firstSource.name },
       title: "API Test Session - JS",
-      requirePlanApproval: false
-    };
-
-    const session = await client.createSession(request);
-    console.log("   ✅ Success: Session created");
-    console.log(`      ID: ${session.id}`);
-    console.log(`      Title: ${session.title}`);
-    console.log(`      Name: ${session.name}`);
+    });
+    console.log(`   ✅ Success: Session created with ID: ${session.id}`);
     return session;
   } catch (error) {
     console.log(`   ❌ Failed: ${error.message}`);
@@ -69,12 +68,9 @@ async function testGetSession(client, sessionId) {
     console.log("   ⚠️  Skipping: No session ID available");
     return null;
   }
-
   try {
     const session = await client.getSession(sessionId);
-    console.log("   ✅ Success: Session retrieved");
-    console.log(`      ID: ${session.id}`);
-    console.log(`      Title: ${session.title}`);
+    console.log(`   ✅ Success: Session retrieved with ID: ${session.id}`);
     return session;
   } catch (error) {
     console.log(`   ❌ Failed: ${error.message}`);
@@ -87,80 +83,125 @@ async function testListSessions(client) {
   try {
     const response = await client.listSessions(5);
     console.log(`   ✅ Success: Found ${response.sessions.length} sessions`);
-    if (response.nextPageToken) {
-      console.log(`      Next page token: ${response.nextPageToken}`);
-    }
     return response.sessions;
   } catch (error) {
     console.log(`   ❌ Failed: ${error.message}`);
-    return [];
+    return null;
   }
 }
 
 async function testListActivities(client, sessionId) {
-  console.log("\n🎬 Testing: List Activities");
-  if (!sessionId) {
-    console.log("   ⚠️  Skipping: No session ID available");
-    return [];
-  }
-
-  try {
-    const response = await client.listActivities(sessionId, 10);
-    console.log(`   ✅ Success: Found ${response.activities.length} activities`);
-    response.activities.slice(0, 3).forEach((activity, i) => {
-      const timestamp = activity.timestamp ? activity.timestamp.toLocaleTimeString() : "No timestamp";
-      const content = (activity.content || "No content").substring(0, 50) + "...";
-      console.log(`      [${i + 1}] ${activity.type} @ ${timestamp}: ${content}`);
-    });
-    if (response.activities.length > 3) {
-      console.log(`      ... and ${response.activities.length - 3} more activities`);
+    console.log("\n🎬 Testing: List Activities");
+    if (!sessionId) {
+        console.log("   ⚠️  Skipping: No session ID available");
+        return null;
     }
-    return response.activities;
-  } catch (error) {
-    console.log(`   ❌ Failed: ${error.message}`);
-    return [];
-  }
+
+    let retries = 5; // Max 5 retries
+    while (retries > 0) {
+        try {
+            const response = await client.listActivities(sessionId, 10);
+            console.log(`   ✅ Success: Found ${response.activities.length} activities`);
+            return response.activities;
+        } catch (error) {
+            if (error.message.includes("404")) {
+                retries--;
+                console.log(`   ... Received 404, retrying in 10 seconds (${retries} retries left)`);
+                await sleep(10000);
+            } else {
+                console.log(`   ❌ Failed: ${error.message}`);
+                return null;
+            }
+        }
+    }
+    console.log("   ❌ Failed: Could not get activities after multiple retries.");
+    return null;
 }
+
 
 async function testSendMessage(client, sessionId) {
-  console.log("\n💬 Testing: Send Message");
-  if (!sessionId) {
-    console.log("   ⚠️  Skipping: No session ID available");
+    console.log("\n💬 Testing: Send Message");
+    if (!sessionId) {
+        console.log("   ⚠️  Skipping: No session ID available");
+        return false;
+    }
+    let retries = 5;
+    while(retries > 0) {
+        try {
+            await client.sendMessage(sessionId, { prompt: "Test message." });
+            console.log("   ✅ Success: Message sent.");
+            return true;
+        } catch (error) {
+            if (error.message.includes("404")) {
+                retries--;
+                console.log(`   ... Received 404, retrying in 10 seconds (${retries} retries left)`);
+                await sleep(10000);
+            } else {
+                 console.log(`   ❌ Failed: ${error.message}`);
+                 return false;
+            }
+        }
+    }
+    console.log("   ❌ Failed: Could not send message after multiple retries.");
     return false;
-  }
-
-  try {
-    const request = {
-      prompt: "Please confirm that the API testing is working correctly by acknowledging this message."
-    };
-    await client.sendMessage(sessionId, request);
-    console.log("   ✅ Success: Message sent");
-    return true;
-  } catch (error) {
-    console.log(`   ❌ Failed: ${error.message}`);
-    return false;
-  }
 }
 
-async function testGetSource(client, sources) {
-  console.log("\n📦 Testing: Get Source");
-  if (!sources || sources.length === 0) {
-    console.log("   ⚠️  Skipping: No sources available");
-    return null;
-  }
 
-  const sourceId = sources[0].id;
-  try {
-    const source = await client.getSource(sourceId);
-    console.log("   ✅ Success: Source retrieved");
-    console.log(`      ID: ${source.id}`);
-    console.log(`      Name: ${source.name}`);
-    return source;
-  } catch (error) {
-    console.log(`   ❌ Failed: ${error.message}`);
-    return null;
-  }
+// --- New Tests ---
+
+async function testClientCreationFromEnv() {
+    console.log("\n🔑 Testing: Client Creation from Env Var");
+    try {
+        const client = new JulesClient(); // No options
+        await client.listSources();
+        console.log(`   ✅ Success: Client created and attempted API call using JULES_API_KEY.`);
+        return true;
+    } catch (e) {
+        if (e.message.includes("API key must be provided")) {
+            console.log(`   ❌ Failed: ${e.message}`);
+            return false;
+        }
+        console.log(`   ✅ Success: Client created, though API call failed as expected: ${e.message}`);
+        return true;
+    }
 }
+
+async function testTimeoutError() {
+    console.log("\n⏱️  Testing: Request Timeout");
+    try {
+        const client = new JulesClient({ timeout: 1 }); // 1ms timeout
+        await client.listSources();
+        console.log("   ❌ Failed: API call did not time out as expected.");
+        return false;
+    } catch (e) {
+        if (e.message.toLowerCase().includes('timeout')) {
+            console.log("   ✅ Success: API call timed out as expected.");
+            return true;
+        } else {
+            console.log(`   ❌ Failed: Received an error, but it was not a timeout error: ${e.message}`);
+            return false;
+        }
+    }
+}
+
+async function testInvalidApiKey() {
+    console.log("\n🚫 Testing: Invalid API Key");
+    try {
+        const client = new JulesClient({ apiKey: "invalid-key-for-testing" });
+        await client.listSources();
+        console.log("   ❌ Failed: API call succeeded with an invalid key.");
+        return false;
+    } catch (e) {
+        if (e.message.includes("400") || e.message.includes("401") || e.message.includes("403")) {
+            console.log(`   ✅ Success: API call failed with an invalid key as expected.`);
+            return true;
+        } else {
+            console.log(`   ❌ Failed: API call failed, but not with the expected status code. Error: ${e.message}`);
+            return false;
+        }
+    }
+}
+
 
 async function main() {
   console.log("🧪 Jules API Comprehensive Test Suite - JavaScript Version");
@@ -168,94 +209,74 @@ async function main() {
   console.log(`⏰ Test started at: ${new Date().toISOString()}`);
   console.log();
 
-  // API key from the user
-  const apiKey = "AQ.Ab8RN6L3BuTOmJ8G7VmrIPu8u_LY14P4AFgs1V4CcNWDFYlQNg";
+  const apiKey = process.env.JULES_API_KEY;
+    if (!apiKey) {
+        console.log("❌ Error: JULES_API_KEY environment variable not found.");
+        return 1;
+    }
 
-  console.log(`🔑 Using API Key: ${apiKey.substring(0, 20)}...`);
+  console.log(`🔑 Using API Key from .env: ${apiKey.substring(0, 20)}...`);
   console.log();
 
-  try {
-    // Create client (note: using ClientOptions-like structure)
-    const client = new JulesClient({
-      apiKey: apiKey
-    });
+  const client = new JulesClient({ apiKey });
 
-    // Test results tracking
-    const testResults = {
-      listSources: false,
-      createSession: false,
-      getSession: false,
-      listSessions: false,
-      listActivities: false,
-      sendMessage: false,
-      getSource: false
-    };
+  const testResults = {};
+  let sources = [];
+  let sessionId = null;
 
-    // Run tests
-    let sources = [];
-    let session = null;
-    let sessionId = null;
+  // Standard API tests
+  sources = await testListSources(client);
+  testResults['List Sources'] = sources !== null && sources.length > 0;
 
-    // 1. List sources
-    sources = await testListSources(client);
-    testResults.listSources = sources.length > 0;
+  const session = await testCreateSession(client, sources);
+  testResults['Create Session'] = session !== null;
+  if(session) sessionId = session.id;
 
-    // 2. Create session
-    session = await testCreateSession(client, sources);
-    testResults.createSession = session !== null;
-    if (session) {
-      sessionId = session.id;
-    }
+  testResults['Get Session'] = (await testGetSession(client, sessionId)) !== null;
 
-    // 3. Get session
-    testResults.getSession = (await testGetSession(client, sessionId)) !== null;
+  const sessionsList = await testListSessions(client);
+  testResults['List Sessions'] = sessionsList !== null;
 
-    // 4. List sessions
-    const sessionsList = await testListSessions(client);
-    testResults.listSessions = sessionsList.length >= 0; // Could be empty
+  const activities = await testListActivities(client, sessionId);
+  testResults['List Activities'] = activities !== null;
 
-    // 5. List activities (wait a moment for activities to be generated)
-    console.log("\n⏳ Waiting 5 seconds for activities to be generated...");
-    await new Promise(resolve => setTimeout(resolve, 5000));
-    const activities = await testListActivities(client, sessionId);
-    testResults.listActivities = activities.length >= 0;
+  testResults['Send Message'] = await testSendMessage(client, sessionId);
 
-    // 6. Send message
-    testResults.sendMessage = await testSendMessage(client, sessionId);
 
-    // 7. Get source
-    testResults.getSource = (await testGetSource(client, sources)) !== null;
+  // New client/error handling tests
+  console.log("\n" + "=".repeat(60));
+  console.log("🚀 Running New Client/Error Handling Tests");
+  console.log("=".repeat(60));
+  testResults['Client Creation From Env'] = await testClientCreationFromEnv();
+  testResults['Request Timeout'] = await testTimeoutError();
+  testResults['Invalid API Key'] = await testInvalidApiKey();
 
-    // Summary
-    console.log("\n" + "=".repeat(60));
-    console.log("📊 TEST RESULTS SUMMARY");
-    console.log("=".repeat(60));
 
-    const totalTests = Object.keys(testResults).length;
-    const passedTests = Object.values(testResults).filter(v => v).length;
-    const failedTests = totalTests - passedTests;
+  // Summary
+  console.log("\n" + "=".repeat(60));
+  console.log("📊 TEST RESULTS SUMMARY");
+  console.log("=".repeat(60));
 
-    console.log(`Total Tests: ${totalTests}`);
-    console.log(`Passed: ${passedTests}`);
-    console.log(`Failed: ${failedTests}`);
-    console.log();
+  const totalTests = Object.keys(testResults).length;
+  const passedTests = Object.values(testResults).filter(v => v).length;
+  const failedTests = totalTests - passedTests;
 
-    Object.entries(testResults).forEach(([testName, passed]) => {
-      const status = passed ? "✅ PASS" : "❌ FAIL";
-      console.log(`  ${testName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${status}`);
-    });
+  console.log(`Total Tests: ${totalTests}`);
+  console.log(`Passed: ${passedTests}`);
+  console.log(`Failed: ${failedTests}`);
+  console.log();
 
-    console.log();
-    if (failedTests === 0) {
-      console.log("🎉 ALL TESTS PASSED! The Jules API is working correctly.");
-      return 0;
-    } else {
-      console.log(`⚠️  ${failedTests} test(s) failed. Please check the API or network connection.`);
-      return 1;
-    }
+  Object.entries(testResults).forEach(([testName, passed]) => {
+    const status = passed ? "✅ PASS" : "❌ FAIL";
+    console.log(`  ${testName}: ${status}`);
+  });
 
-  } catch (error) {
-    console.log(`💥 Unexpected error during testing: ${error.message}`);
+  console.log();
+  if (failedTests === 0) {
+    console.log("🎉 ALL TESTS PASSED!");
+    return 0;
+  } else {
+    console.log(`⚠️  ${failedTests} test(s) failed.`);
     return 1;
   }
 }

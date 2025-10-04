@@ -4,6 +4,7 @@
     "test": "node test_api_js.js"
   },
   "dependencies": {
-    "@yuzumican/jules-api": "^0.1.1-alpha"
+    "@yuzumican/jules-api": "^0.1.1-alpha",
+    "dotenv": "^16.4.5"
   }
 }
