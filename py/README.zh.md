@@ -3,6 +3,8 @@
 [![PyPI version](https://badge.fury.io/py/jules-api.svg)](https://pypi.org/project/jules-api/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python Versions](https://img.shields.io/pypi/pyversions/jules-api)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/jules-api?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/jules-api)
+
 
 道歉：我们在早期版本中误将其呈现为官方库。我们对此表示歉意。这是非官方库。
 

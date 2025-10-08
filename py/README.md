@@ -3,6 +3,9 @@
 [![PyPI version](https://badge.fury.io/py/jules-api.svg)](https://pypi.org/project/jules-api/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python Versions](https://img.shields.io/pypi/pyversions/jules-api)
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/jules-api?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/jules-api)
+
+
 Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.
 
 Unofficial Python client library for the Jules API.
