@@ -3,6 +3,8 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/yuyu1815/jules-api/go.svg)](https://pkg.go.dev/github.com/yuyu1815/jules-api/go)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.
+
 Unofficial Go client library for the Jules API.
 
 ## Installation
@@ -210,7 +212,3 @@ Contributions are welcome! Please read our [Contributing Guidelines](../CONTRIBU
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
-
-## Support
-
-For support, please contact [support@jules.ai](mailto:support@jules.ai) or visit our [documentation](https://developers.google.com/jules/api).

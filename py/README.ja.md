@@ -7,6 +7,7 @@
 Jules API の非公式 Python クライアントライブラリ。
 
 ## インストール
+謝罪：以前のバージョンで誤ってこのライブラリを公式として紹介してしまい、申し訳ありません。このライブラリは非公式です。
 
 このライブラリは非公式です。[GitHub リポジトリ](https://github.com/yuyu1815/jules-api/tree/main/py)からインストールおよび使用方法を確認してください。
 
@@ -222,7 +223,3 @@ except HTTPError as e:
 ## ライセンス
 
 このプロジェクトは MIT ライセンスの下でライセンスされています - 詳細は[LICENSE](../LICENSE) ファイルをご覧ください。
-
-## サポート
-
-サポートについては、[support@jules.ai](mailto:support@jules.ai) までお問い合わせいただくか、[当社のドキュメント](https://developers.google.com/jules/api)をご覧ください。

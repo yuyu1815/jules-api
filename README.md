@@ -1,5 +1,7 @@
 # Jules API Client Libraries
 
+Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.
+
 This is an unofficial library.
 
 This repository contains client libraries for the Jules API in three languages: JavaScript/Node.js, Go, and Python.

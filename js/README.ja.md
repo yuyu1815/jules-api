@@ -3,6 +3,8 @@
 [![npm version](https://badge.fury.io/js/%40jules-ai%2Fjules-api.svg)](https://badge.fury.io/js/%40jules-ai%2Fjules-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+謝罪：以前のバージョンで誤ってこのライブラリを公式として紹介してしまい、申し訳ありません。このライブラリは非公式です。
+
 Jules API の非公式 Node.js/TypeScript クライアントライブラリ。
 
 ## インストール
@@ -175,7 +177,3 @@ try {
 ## ライセンス
 
 このプロジェクトは MIT ライセンスの下でライセンスされています - 詳細は[LICENSE](../LICENSE) ファイルをご覧ください。
-
-## サポート
-
-サポートについては、[support@jules.ai](mailto:support@jules.ai) までお問い合わせいただくか、[当社のドキュメント](https://developers.google.com/jules/api)をご覧ください。

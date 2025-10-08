@@ -3,6 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/jules-api.svg)](https://pypi.org/project/jules-api/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Python Versions](https://img.shields.io/pypi/pyversions/jules-api)
+Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.
 
 Unofficial Python client library for the Jules API.
 
@@ -224,7 +225,3 @@ Contributions are welcome! Please read our [Contributing Guidelines](../CONTRIBU
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
-
-## Support
-
-For support, please contact [support@jules.ai](mailto:support@jules.ai) or visit our [documentation](https://developers.google.com/jules/api).

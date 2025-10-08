@@ -19,7 +19,7 @@ from .models import (
     ListActivitiesResponse,
 )
 
-__version__ = "0.1.0a"
+__version__ = "1.0.1"
 __all__ = [
     "JulesClient",
     "create_client",

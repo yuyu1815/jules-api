@@ -3,6 +3,8 @@
 [![npm version](https://badge.fury.io/js/%40jules-ai%2Fjules-api.svg)](https://badge.fury.io/js/%40jules-ai%2Fjules-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+道歉：我们在早期版本中误将其呈现为官方库。我们对此表示歉意。这是非官方库。
+
 Jules API 的非官方 Node.js/TypeScript 客户端库。
 
 ## 安装
@@ -175,7 +177,3 @@ try {
 ## 许可证
 
 本项目根据 MIT 许可证获得许可 - 详情请参阅[LICENSE](../LICENSE) 文件。
-
-## 支持
-
-有关支持，请联系[support@jules.ai](mailto:support@jules.ai) 或访问我们的[文档](https://developers.google.com/jules/api)。

@@ -1,5 +1,7 @@
 # Jules API 客户端库
 
+道歉：我们在早期版本中误将其呈现为官方库。我们对此表示歉意。这是非官方库。
+
 这是非官方库。
 
 此仓库包含用于 Jules API 的客户端库，支持三种语言：JavaScript/Node.js、Go 和 Python。
