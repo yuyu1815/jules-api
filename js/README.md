@@ -1,7 +1,8 @@
 # Jules API JavaScript Client
 
-[![npm version](https://badge.fury.io/js/%40jules-ai%2Fjules-api.svg)](https://badge.fury.io/js/%40jules-ai%2Fjules-api)
+[![npm version](https://badge.fury.io/js/@yuzumican%2Fjules-api.svg)](https://www.npmjs.com/package/@yuzumican/jules-api?activeTab=readme)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Usage Trend of @yuzumican/jules-api](https://img.shields.io/npm/dy/@yuzumican/jules-api)](https://npm-compare.com/@yuzumican/jules-api)
 
 Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.
 

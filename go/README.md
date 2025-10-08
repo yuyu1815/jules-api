@@ -1,6 +1,6 @@
 # Jules API Go Client
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/yuyu1815/jules-api/go.svg)](https://pkg.go.dev/github.com/yuyu1815/jules-api/go)
+[![Go project version](https://badge.fury.io/go/github.com%2Fyuyu1815%2Fjules-api.svg)](https://badge.fury.io/go/github.com%2Fyuyu1815%2Fjules-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.

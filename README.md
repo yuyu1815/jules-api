@@ -1,3 +1,5 @@
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/jules-api?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/jules-api)
+
 # Jules API Client Libraries
 
 Apology: We apologize for mistakenly presenting this library as official in earlier versions. This is an unofficial library.

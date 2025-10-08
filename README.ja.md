@@ -1,3 +1,5 @@
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/jules-api?period=total&units=INTERNATIONAL_SYSTEM&left_color=BLACK&right_color=GREEN&left_text=downloads)](https://pepy.tech/projects/jules-api)
+
 # Jules API クライアントライブラリ
 
 謝罪：以前のバージョンで誤ってこのライブラリを公式として紹介してしまい、申し訳ありません。このライブラリは非公式です。
